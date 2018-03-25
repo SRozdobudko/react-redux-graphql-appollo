@@ -1,0 +1,390 @@
+body {
+  background-color: #ececec;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}
+
+.Form {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  margin: 0 auto;
+  width: 100%;
+
+  &__Title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: #54a0eb;
+    text-align: center;
+    padding: 20px;
+  }
+
+  &__Progress {
+    height: 5px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    counter-reset: step;
+    @include transition(.4s linear);
+    @include transition-property(width, background-color);
+
+    &::before {
+      position: absolute;
+      bottom: 0;
+      background: url('../assets/images/stripes.png') 0 0 repeat;
+    }
+
+    &::after {
+      position: absolute;
+      z-index: 2;
+      bottom: 45%;
+      @include linear-gradient(top, rgba(white, .3), rgba(white, .05));
+    }
+
+
+    li {
+      width: 33.33%;
+      float: left;
+      font-size: 9px;
+      color: white;
+      list-style-type: none;
+      position: relative;
+
+      &:first-child:after {
+        content: none; 
+      }
+
+      &::before,
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+
+      &.is-active::before,
+      &.is-active::after {
+        background-color: #54a0eb !important;
+        color: white;
+      }
+
+      &::before {
+        content: counter(step);
+        counter-increment: step;
+        width: 20px;
+        line-height: 20px;
+        display: block;
+        font-size: 10px;
+        color: #333;
+        background: #ececec;
+        border-radius: 3px;
+        margin: 0 auto 5px auto;
+        text-align: center;
+        top: -7px;
+        z-index: 1;
+      }
+
+      &::after {
+        content: '';
+        width: 100%;
+        height: 2px;
+        background: #ececec;
+        position: absolute;
+        left: -50%;
+        top: 2px;
+        z-index: 0;
+      }
+    }
+  }
+
+  %FieldGroupItem {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    display: inline-block;
+    width: 100%;
+    // padding: 2px 0; 
+    cursor: pointer;
+    line-height: 35px;
+    height: 35px;
+    outline: none;
+
+  }
+
+  &__FieldGroupItem {
+    @extend %FieldGroupItem;
+
+    .Form__SelectGroup & {
+      line-height: 31px;
+      text-indent: 10px;
+    }
+  }
+
+  %SelectWrapper {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #d0d0d0;
+    cursor: pointer;
+    &:after {
+      content: "\f0dc";
+      font-family: 'FontAwesome';
+      color: #000;
+      position: absolute;
+      right: 5px;
+      top: 0px;
+      z-index: 1;
+      line-height: 37px;
+    }
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  &__SelectWrapper {
+    @extend %SelectWrapper;
+    width: 30%;
+
+    &--error {
+      @extend %SelectWrapper;
+      width: 30%;
+      text-transform: lowercase;
+      border-color: #f1004e !important;
+    }
+
+    &--full-width {
+      @extend %SelectWrapper;
+      width: 90%;
+      padding-left: 10px;
+    }
+  }
+
+  %DefaultFieldGroup {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  &__FieldGroup {
+    @extend %DefaultFieldGroup;
+
+    &--centered {
+      @extend %DefaultFieldGroup;
+      text-align: center;
+    }
+  }
+
+  &__SelectGroup {
+    @extend %DefaultFieldGroup;
+    text-align: center;
+  }
+
+  &__RadioGroup {
+  @extend %DefaultFieldGroup;
+    text-align: center;
+  }
+
+  &__Content {
+    padding: 30px;
+    &Title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      text-align: center;
+      &--error,
+      .error {
+        color: #f1004e !important;
+      }
+    }
+  }
+
+  %Label {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #5c5c5c;
+  }
+  &__Label {
+    @extend %Label;
+
+    &--error {
+      @extend %Label;
+      color: #f1004e !important;
+    }
+  }
+
+  %Input {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    border-width: 0;
+    border-bottom: 1px solid #d3d3d3;
+    font-size: 22px;
+    width: 100%;
+    margin-bottom: 5px;
+    outline: none;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    }
+  }
+
+  &__Input {
+    @extend %Input;
+    &--error {
+      @extend %Input;
+      border-color: #f1004e !important;
+    }
+  }
+
+  &__Footer {
+    padding: 15px;
+    border-top: 1px solid #c8c8c8;
+    overflow: hidden;
+  }
+
+  %BtnDefault {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300 !important;
+    font-size: 20px !important;
+    color: #48a0eb;
+    display: block;
+    outline: none;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    background: none;
+    border: 0;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    &[disabled] {
+      opacity: 0.3;
+    }
+
+    span {
+      font-size: 22px;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  %BtnGhost {
+    @extend %BtnDefault;
+    color: #8bb9ef;
+    border-radius: 4px;
+    border: 1px solid #8bb9ef;
+    padding: 10px 20px; 
+    display: inline-block;
+    transition: background-color .3s ease, color .3s ease;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #54a0eb;
+      color: white;
+    }
+  }
+
+  &__BtnGhost {
+    @extend %BtnGhost;
+  }
+
+  &__BtnPrev {
+    @extend %BtnDefault;
+    float: left;
+    color: #aaa1a1 !important;
+
+    span {
+      margin-right: 5px;
+    }
+  }
+
+  &__BtnNext {
+    @extend %BtnDefault;
+    float: right;
+
+    span {
+      margin-left: 5px;
+    }
+  }
+
+  &__RadioInput {
+    position: absolute;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+
+    &:checked + label {
+      background-color: #3b85dd;
+      color: white;
+      font-weight: 400;
+    }
+  }
+
+  &__RadioWrapper {
+    position: relative;
+    width: 30%;
+    display: inline-block;
+    border: 1px solid #d0d0d0;
+    overflow: hidden;
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  &__RadioBtn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    text-align: center;
+    background-color: white;
+    padding: 10px 20px;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  &__IconCheck {
+    font-size: 8em;
+    color: #a3f185;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__Action {
+    width: 100%;
+    margin: 20px 0;
+    &--center {
+      width: 100%;
+      margin: 20px 0;
+      text-align: center;
+    }
+  }
+}
